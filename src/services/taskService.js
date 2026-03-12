@@ -2,7 +2,7 @@ const taskRepository = require('../repositories/taskRepository');
 const ApiError = require('../utils/apiError');
 
 exports.create = async (userId, data) => {
-  return taskRepository.create({ ...data, user: userId });
+  return taskRepository.create({ ...data, userId });
 };
 
 exports.getAllByUser = async (userId) => {
@@ -11,7 +11,7 @@ exports.getAllByUser = async (userId) => {
 
 exports.getById = async (taskId, userId) => {
   const task = await taskRepository.findById(taskId);
-  if (!task || task.user.toString() !== userId) {
+  if (!task || task.userId !== userId) {
     throw new ApiError(404, 'Task not found');
   }
   return task;
@@ -19,7 +19,7 @@ exports.getById = async (taskId, userId) => {
 
 exports.update = async (taskId, userId, data) => {
   const task = await taskRepository.findById(taskId);
-  if (!task || task.user.toString() !== userId) {
+  if (!task || task.userId !== userId) {
     throw new ApiError(404, 'Task not found');
   }
   return taskRepository.update(taskId, data);
@@ -27,7 +27,7 @@ exports.update = async (taskId, userId, data) => {
 
 exports.remove = async (taskId, userId) => {
   const task = await taskRepository.findById(taskId);
-  if (!task || task.user.toString() !== userId) {
+  if (!task || task.userId !== userId) {
     throw new ApiError(404, 'Task not found');
   }
   return taskRepository.remove(taskId);

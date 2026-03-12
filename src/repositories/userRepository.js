@@ -1,13 +1,15 @@
-const User = require('../models/User');
+const { User } = require('../models');
 
 exports.create = async (data) => {
   return User.create(data);
 };
 
 exports.findByEmail = async (email) => {
-  return User.findOne({ email });
+  return User.findOne({ where: { email } });
 };
 
 exports.findById = async (id) => {
-  return User.findById(id).select('-password');
+  return User.findByPk(id, {
+    attributes: { exclude: ['password'] },
+  });
 };

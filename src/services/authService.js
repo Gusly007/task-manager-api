@@ -11,9 +11,9 @@ exports.register = async ({ name, email, password }) => {
 
   const hashedPassword = await hashPassword(password);
   const user = await userRepository.create({ name, email, password: hashedPassword });
-  const token = generateToken({ id: user._id });
+  const token = generateToken({ id: user.id });
 
-  return { user: { id: user._id, name: user.name, email: user.email }, token };
+  return { user: { id: user.id, name: user.name, email: user.email }, token };
 };
 
 exports.login = async ({ email, password }) => {
@@ -27,7 +27,7 @@ exports.login = async ({ email, password }) => {
     throw new ApiError(401, 'Invalid credentials');
   }
 
-  const token = generateToken({ id: user._id });
+  const token = generateToken({ id: user.id });
 
-  return { user: { id: user._id, name: user.name, email: user.email }, token };
+  return { user: { id: user.id, name: user.name, email: user.email }, token };
 };

@@ -1,21 +1,29 @@
-const Task = require('../models/Task');
+const { Task } = require('../models');
 
 exports.create = async (data) => {
   return Task.create(data);
 };
 
 exports.findAllByUser = async (userId) => {
-  return Task.find({ user: userId }).sort({ createdAt: -1 });
+  return Task.findAll({
+    where: { userId },
+    order: [['createdAt', 'DESC']],
+  });
 };
 
 exports.findById = async (id) => {
-  return Task.findById(id);
+  return Task.findByPk(id);
 };
 
 exports.update = async (id, data) => {
-  return Task.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+  const task = await Task.findByPk(id);
+  if (!task) return null;
+  return task.update(data);
 };
 
 exports.remove = async (id) => {
-  return Task.findByIdAndDelete(id);
+  const task = await Task.findByPk(id);
+  if (!task) return null;
+  await task.destroy();
+  return task;
 };
